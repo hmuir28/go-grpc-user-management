@@ -1,0 +1,22 @@
+syntax="proto3";
+
+option go_package = "./proto";
+
+package user_service;
+
+service UserService {
+
+    rpc CreateUser(stream CreateUserRequest) returns (stream CreateUserResponse);    
+}
+
+message CreateUserRequest {
+    string username = 1;
+    string email = 2;
+    string firstName = 3;
+    string lastName = 4;
+    string password = 5;
+}
+
+message CreateUserResponse {
+    string url = 1;
+}
