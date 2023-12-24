@@ -2,10 +2,11 @@ package main
 
 import (
 	"log"
+	"net"
 
 	pb "github.com/hmuir28/go-grpc-user-management/proto"
+	"github.com/hmuir28/go-grpc-user-management/service"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -14,26 +15,21 @@ const (
 
 func main() {
 
-	conn, err := grpc.Dial("localhost"+port, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	lis, err := net.Listen("tcp", ":8089")
 
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		log.Fatalf("cannot create listener: %s", err)
 	}
 
-	defer conn.Close()
+	grpcServer := grpc.NewServer()
 
-	client := pb.NewUserServiceClient(conn)
+	newServer := &service.MyUserServiceServer{}
 
-	createUserRequest := &pb.CreateUserRequest{
-		FirstName: "Harry",
-		LastName:  "Muir",
-		Username:  "hmuir@gmail.com",
-		Password:  "12345",
-		Email:     "hmuir@gmail.com",
+	pb.RegisterUserServiceServer(grpcServer, newServer)
+
+	err = grpcServer.Serve(lis)
+
+	if err != nil {
+		log.Fatalf("Impossible to serve: %s", err)
 	}
-
-	// callSayHello(client)
-	// callSayHelloServerStreaming(client, names)
-	// callSayHelloClientStreaming(client, names)
-	us.callCreateUser(client, createUserRequest)
 }

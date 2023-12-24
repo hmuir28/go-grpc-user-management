@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.25.0
-// source: user.proto
+// source: proto/user.proto
 
 package proto
 
@@ -26,7 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	CreateUser(ctx context.Context, opts ...grpc.CallOption) (UserService_CreateUserClient, error)
+	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 }
 
 type userServiceClient struct {
@@ -37,42 +37,20 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) CreateUser(ctx context.Context, opts ...grpc.CallOption) (UserService_CreateUserClient, error) {
-	stream, err := c.cc.NewStream(ctx, &UserService_ServiceDesc.Streams[0], UserService_CreateUser_FullMethodName, opts...)
+func (c *userServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
+	out := new(CreateUserResponse)
+	err := c.cc.Invoke(ctx, UserService_CreateUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &userServiceCreateUserClient{stream}
-	return x, nil
-}
-
-type UserService_CreateUserClient interface {
-	Send(*CreateUserRequest) error
-	Recv() (*CreateUserResponse, error)
-	grpc.ClientStream
-}
-
-type userServiceCreateUserClient struct {
-	grpc.ClientStream
-}
-
-func (x *userServiceCreateUserClient) Send(m *CreateUserRequest) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *userServiceCreateUserClient) Recv() (*CreateUserResponse, error) {
-	m := new(CreateUserResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
-	CreateUser(UserService_CreateUserServer) error
+	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -80,8 +58,8 @@ type UserServiceServer interface {
 type UnimplementedUserServiceServer struct {
 }
 
-func (UnimplementedUserServiceServer) CreateUser(UserService_CreateUserServer) error {
-	return status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+func (UnimplementedUserServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -96,30 +74,22 @@ func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 	s.RegisterService(&UserService_ServiceDesc, srv)
 }
 
-func _UserService_CreateUser_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(UserServiceServer).CreateUser(&userServiceCreateUserServer{stream})
-}
-
-type UserService_CreateUserServer interface {
-	Send(*CreateUserResponse) error
-	Recv() (*CreateUserRequest, error)
-	grpc.ServerStream
-}
-
-type userServiceCreateUserServer struct {
-	grpc.ServerStream
-}
-
-func (x *userServiceCreateUserServer) Send(m *CreateUserResponse) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *userServiceCreateUserServer) Recv() (*CreateUserRequest, error) {
-	m := new(CreateUserRequest)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
+func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserRequest)
+	if err := dec(in); err != nil {
 		return nil, err
 	}
-	return m, nil
+	if interceptor == nil {
+		return srv.(UserServiceServer).CreateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_CreateUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).CreateUser(ctx, req.(*CreateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
@@ -128,14 +98,12 @@ func (x *userServiceCreateUserServer) Recv() (*CreateUserRequest, error) {
 var UserService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "user_service.UserService",
 	HandlerType: (*UserServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams: []grpc.StreamDesc{
+	Methods: []grpc.MethodDesc{
 		{
-			StreamName:    "CreateUser",
-			Handler:       _UserService_CreateUser_Handler,
-			ServerStreams: true,
-			ClientStreams: true,
+			MethodName: "CreateUser",
+			Handler:    _UserService_CreateUser_Handler,
 		},
 	},
-	Metadata: "user.proto",
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/user.proto",
 }

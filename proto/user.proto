@@ -6,7 +6,7 @@ package user_service;
 
 service UserService {
 
-    rpc CreateUser(stream CreateUserRequest) returns (stream CreateUserResponse);    
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);    
 }
 
 message CreateUserRequest {
