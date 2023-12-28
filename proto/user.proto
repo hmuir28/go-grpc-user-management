@@ -4,9 +4,14 @@ option go_package = "./proto";
 
 package user_service;
 
-service UserService {
+service UserServiceUnary {
 
-    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);    
+    rpc UnaryCreateUser(CreateUserRequest) returns (CreateUserResponse);    
+}
+
+service UserServiceBidrectional {
+
+    rpc BidirectionalCreateUser(stream CreateUserRequest) returns (stream CreateUserResponse);    
 }
 
 message CreateUserRequest {

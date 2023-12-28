@@ -9,10 +9,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-const (
-	port = ":8000"
-)
-
 func main() {
 
 	lis, err := net.Listen("tcp", ":8089")
@@ -25,7 +21,7 @@ func main() {
 
 	newServer := &service.MyUserServiceServer{}
 
-	pb.RegisterUserServiceServer(grpcServer, newServer)
+	pb.RegisterUserServiceBidrectionalServer(grpcServer, newServer)
 
 	err = grpcServer.Serve(lis)
 

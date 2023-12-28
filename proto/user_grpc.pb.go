@@ -19,91 +19,214 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserService_CreateUser_FullMethodName = "/user_service.UserService/CreateUser"
+	UserServiceUnary_UnaryCreateUser_FullMethodName = "/user_service.UserServiceUnary/UnaryCreateUser"
 )
 
-// UserServiceClient is the client API for UserService service.
+// UserServiceUnaryClient is the client API for UserServiceUnary service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type UserServiceClient interface {
-	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+type UserServiceUnaryClient interface {
+	UnaryCreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 }
 
-type userServiceClient struct {
+type userServiceUnaryClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
-	return &userServiceClient{cc}
+func NewUserServiceUnaryClient(cc grpc.ClientConnInterface) UserServiceUnaryClient {
+	return &userServiceUnaryClient{cc}
 }
 
-func (c *userServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
+func (c *userServiceUnaryClient) UnaryCreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
 	out := new(CreateUserResponse)
-	err := c.cc.Invoke(ctx, UserService_CreateUser_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserServiceUnary_UnaryCreateUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// UserServiceServer is the server API for UserService service.
-// All implementations must embed UnimplementedUserServiceServer
+// UserServiceUnaryServer is the server API for UserServiceUnary service.
+// All implementations must embed UnimplementedUserServiceUnaryServer
 // for forward compatibility
-type UserServiceServer interface {
-	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
-	mustEmbedUnimplementedUserServiceServer()
+type UserServiceUnaryServer interface {
+	UnaryCreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
+	mustEmbedUnimplementedUserServiceUnaryServer()
 }
 
-// UnimplementedUserServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedUserServiceServer struct {
+// UnimplementedUserServiceUnaryServer must be embedded to have forward compatible implementations.
+type UnimplementedUserServiceUnaryServer struct {
 }
 
-func (UnimplementedUserServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+func (UnimplementedUserServiceUnaryServer) UnaryCreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnaryCreateUser not implemented")
 }
-func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
+func (UnimplementedUserServiceUnaryServer) mustEmbedUnimplementedUserServiceUnaryServer() {}
 
-// UnsafeUserServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to UserServiceServer will
+// UnsafeUserServiceUnaryServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to UserServiceUnaryServer will
 // result in compilation errors.
-type UnsafeUserServiceServer interface {
-	mustEmbedUnimplementedUserServiceServer()
+type UnsafeUserServiceUnaryServer interface {
+	mustEmbedUnimplementedUserServiceUnaryServer()
 }
 
-func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
-	s.RegisterService(&UserService_ServiceDesc, srv)
+func RegisterUserServiceUnaryServer(s grpc.ServiceRegistrar, srv UserServiceUnaryServer) {
+	s.RegisterService(&UserServiceUnary_ServiceDesc, srv)
 }
 
-func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserServiceUnary_UnaryCreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).CreateUser(ctx, in)
+		return srv.(UserServiceUnaryServer).UnaryCreateUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserService_CreateUser_FullMethodName,
+		FullMethod: UserServiceUnary_UnaryCreateUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CreateUser(ctx, req.(*CreateUserRequest))
+		return srv.(UserServiceUnaryServer).UnaryCreateUser(ctx, req.(*CreateUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
+// UserServiceUnary_ServiceDesc is the grpc.ServiceDesc for UserServiceUnary service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var UserService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user_service.UserService",
-	HandlerType: (*UserServiceServer)(nil),
+var UserServiceUnary_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "user_service.UserServiceUnary",
+	HandlerType: (*UserServiceUnaryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateUser",
-			Handler:    _UserService_CreateUser_Handler,
+			MethodName: "UnaryCreateUser",
+			Handler:    _UserServiceUnary_UnaryCreateUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/user.proto",
+}
+
+const (
+	UserServiceBidrectional_BidirectionalCreateUser_FullMethodName = "/user_service.UserServiceBidrectional/BidirectionalCreateUser"
+)
+
+// UserServiceBidrectionalClient is the client API for UserServiceBidrectional service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type UserServiceBidrectionalClient interface {
+	BidirectionalCreateUser(ctx context.Context, opts ...grpc.CallOption) (UserServiceBidrectional_BidirectionalCreateUserClient, error)
+}
+
+type userServiceBidrectionalClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewUserServiceBidrectionalClient(cc grpc.ClientConnInterface) UserServiceBidrectionalClient {
+	return &userServiceBidrectionalClient{cc}
+}
+
+func (c *userServiceBidrectionalClient) BidirectionalCreateUser(ctx context.Context, opts ...grpc.CallOption) (UserServiceBidrectional_BidirectionalCreateUserClient, error) {
+	stream, err := c.cc.NewStream(ctx, &UserServiceBidrectional_ServiceDesc.Streams[0], UserServiceBidrectional_BidirectionalCreateUser_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &userServiceBidrectionalBidirectionalCreateUserClient{stream}
+	return x, nil
+}
+
+type UserServiceBidrectional_BidirectionalCreateUserClient interface {
+	Send(*CreateUserRequest) error
+	Recv() (*CreateUserResponse, error)
+	grpc.ClientStream
+}
+
+type userServiceBidrectionalBidirectionalCreateUserClient struct {
+	grpc.ClientStream
+}
+
+func (x *userServiceBidrectionalBidirectionalCreateUserClient) Send(m *CreateUserRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *userServiceBidrectionalBidirectionalCreateUserClient) Recv() (*CreateUserResponse, error) {
+	m := new(CreateUserResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// UserServiceBidrectionalServer is the server API for UserServiceBidrectional service.
+// All implementations must embed UnimplementedUserServiceBidrectionalServer
+// for forward compatibility
+type UserServiceBidrectionalServer interface {
+	BidirectionalCreateUser(UserServiceBidrectional_BidirectionalCreateUserServer) error
+	mustEmbedUnimplementedUserServiceBidrectionalServer()
+}
+
+// UnimplementedUserServiceBidrectionalServer must be embedded to have forward compatible implementations.
+type UnimplementedUserServiceBidrectionalServer struct {
+}
+
+func (UnimplementedUserServiceBidrectionalServer) BidirectionalCreateUser(UserServiceBidrectional_BidirectionalCreateUserServer) error {
+	return status.Errorf(codes.Unimplemented, "method BidirectionalCreateUser not implemented")
+}
+func (UnimplementedUserServiceBidrectionalServer) mustEmbedUnimplementedUserServiceBidrectionalServer() {
+}
+
+// UnsafeUserServiceBidrectionalServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to UserServiceBidrectionalServer will
+// result in compilation errors.
+type UnsafeUserServiceBidrectionalServer interface {
+	mustEmbedUnimplementedUserServiceBidrectionalServer()
+}
+
+func RegisterUserServiceBidrectionalServer(s grpc.ServiceRegistrar, srv UserServiceBidrectionalServer) {
+	s.RegisterService(&UserServiceBidrectional_ServiceDesc, srv)
+}
+
+func _UserServiceBidrectional_BidirectionalCreateUser_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(UserServiceBidrectionalServer).BidirectionalCreateUser(&userServiceBidrectionalBidirectionalCreateUserServer{stream})
+}
+
+type UserServiceBidrectional_BidirectionalCreateUserServer interface {
+	Send(*CreateUserResponse) error
+	Recv() (*CreateUserRequest, error)
+	grpc.ServerStream
+}
+
+type userServiceBidrectionalBidirectionalCreateUserServer struct {
+	grpc.ServerStream
+}
+
+func (x *userServiceBidrectionalBidirectionalCreateUserServer) Send(m *CreateUserResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *userServiceBidrectionalBidirectionalCreateUserServer) Recv() (*CreateUserRequest, error) {
+	m := new(CreateUserRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// UserServiceBidrectional_ServiceDesc is the grpc.ServiceDesc for UserServiceBidrectional service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var UserServiceBidrectional_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "user_service.UserServiceBidrectional",
+	HandlerType: (*UserServiceBidrectionalServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "BidirectionalCreateUser",
+			Handler:       _UserServiceBidrectional_BidirectionalCreateUser_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "proto/user.proto",
 }
