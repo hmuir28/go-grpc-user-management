@@ -21,7 +21,7 @@ func main() {
 
 	newServer := &service.MyUserServiceServer{}
 
-	pb.RegisterUserServiceBidrectionalServer(grpcServer, newServer)
+	pb.RegisterUserServiceUnaryServer(grpcServer, newServer)
 
 	err = grpcServer.Serve(lis)
 

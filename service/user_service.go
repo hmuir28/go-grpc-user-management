@@ -26,7 +26,7 @@ type messageHandle struct {
 var messageHandleObject = messageHandle{}
 
 type MyUserServiceServer struct {
-	pb.UnimplementedUserServiceBidrectionalServer
+	pb.UnimplementedUserServiceUnaryServer
 }
 
 func (userServiceClient MyUserServiceServer) UnaryCreateUser(context context.Context, createUserRequest *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
